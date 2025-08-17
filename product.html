@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details | Best Seller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Homepage.css">
+    <style>
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: #eee;
+        }
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            background-color: #f0f0f0;
+        }
+        body.dark-mode .product-container {
+            background-color: #2c2c2c;
+        }
+        .product-box {
+            display: flex;
+            flex-direction: row;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.15);
+            max-width: 1000px;
+            width: 100%;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        body.dark-mode .product-box {
+            background: #333;
+        }
+        .product-image {
+            flex: 1 1 300px;
+        }
+        .product-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            object-fit: contain;
+            transition: transform 0.3s ease-in-out;
+        }
+        .product-image img:hover {
+            transform: scale(1.1);
+        }
+        .product-details {
+            flex: 2 1 400px;
+        }
+        .product-details h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .product-details p {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #444;
+        }
+        .stock-status {
+            font-weight: bold;
+            color: green;
+        }
+        .btns {
+            margin-top: 25px;
+        }
+        .btns button {
+            background: crimson;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 25px;
+            margin: 10px 10px 0 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btns button:hover {
+            background: darkred;
+        }
+        .wishlist {
+            background-color: #ff9800;
+        }
+        .wishlist:hover {
+            background-color: #e68900;
+        }
+        .toggle-dark {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .product-box {
+                flex-direction: column;
+                align-items: center;
+            }
+            .product-details h1 {
+                text-align: center;
+            }
+            .btns {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-dark" onclick="toggleDarkMode()">🌓 Toggle Dark Mode</button>
+
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="logo"><a href="#">Best Seller</a></div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+                <button><a href="/Sign in/Sign.html">SignIn</a></button>
+                <button><a href="#">SignUp</a></button>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="product-container">
+        <div class="product-box">
+            <div class="product-image">
+                <img id="productImage" src="" alt="Product Image">
+            </div>
+            <div class="product-details">
+                <h1 id="productName">Product Name</h1>
+                <p><strong>Price:</strong> <span id="productPrice">$00.00</span></p>
+                <p><strong>Reviews:</strong> <span id="productReviews">⭐️⭐️⭐️⭐️☆</span></p>
+                <p><strong>Stock:</strong> <span class="stock-status" id="stockStatus">In Stock</span></p>
+                <div class="btns">
+                    <button onclick="alert('Your order has been placed!')">Buy Now</button>
+                    <button onclick="window.location.href='Homepage.html'">Back to Home</button>
+                    <button class="wishlist" onclick="addToWishlist()">Add to Wishlist</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get("name");
+        const price = params.get("price");
+        const reviews = params.get("reviews");
+        const image = params.get("image");
+
+        document.getElementById("productName").textContent = name;
+        document.getElementById("productPrice").textContent = price;
+        document.getElementById("productReviews").textContent = reviews;
+        document.getElementById("productImage").src = decodeURIComponent(image);
+
+        const stockStatus = document.getElementById("stockStatus");
+        const randomStock = Math.random();
+        if (randomStock > 0.8) {
+            stockStatus.textContent = "Out of Stock";
+            stockStatus.style.color = "red";
+        } else if (randomStock > 0.5) {
+            stockStatus.textContent = "Only 2 left";
+            stockStatus.style.color = "orange";
+        } else {
+            stockStatus.textContent = "In Stock";
+            stockStatus.style.color = "green";
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function addToWishlist() {
+            alert("Added to Wishlist!");
+        }
+    </script>
+</body>
+</html>

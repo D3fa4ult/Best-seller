@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Details | Best Seller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Homepage.css">
+  <style>
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .product-image {
+      flex: 1 1 350px;
+      text-align: center;
+    }
+    .product-image img {
+      width: 100%;
+      max-width: 450px;
+      border-radius: var(--radius);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      transition: transform .3s;
+    }
+    .product-image img:hover { transform: scale(1.05); }
+
+    .product-details {
+      flex: 1 1 500px;
+    }
+    .product-details h1 {
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+    .product-details p {
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    .price {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 12px 0;
+    }
+    .stock-status { font-weight: bold; }
+    .btns {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btns button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    .buy-btn { background: var(--primary); color: white; }
+    .buy-btn:hover { background: var(--primary-dark); }
+    .wishlist-btn { background: var(--secondary); color: white; }
+    .wishlist-btn:hover { background: var(--secondary-dark); }
+    .back-btn { background: #555; color: white; }
+    .back-btn:hover { background: #333; }
+
+    /* Dark mode tweaks */
+    body.dark-mode .product-details h1 { color: #fff; }
+    body.dark-mode .product-details p { color: #ccc; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navdiv">
+      <div class="logo"><a href="Homepage.html">Best Seller</a></div>
+      <div class="nav-links">
+        <a href="Homepage.html">Home</a>
+        <a href="#">Categories</a>
+        <a href="#">Deals</a>
+        <a href="#">Contact</a>
+        <div class="nav-actions">
+          <button id="toggleDarkBtn">🌓</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="product-container">
+    <div class="product-image">
+      <img id="productImage" src="" alt="Product Image">
+    </div>
+    <div class="product-details">
+      <h1 id="productName">Product Name</h1>
+      <p id="productRating">⭐️⭐️⭐️⭐️☆ (0 reviews)</p>
+      <p class="price" id="productPrice">$0.00</p>
+      <p id="productDesc">Product description goes here...</p>
+      <p><strong>Stock:</strong> <span id="stockStatus" class="stock-status">In Stock</span></p>
+      <div class="btns">
+        <button class="buy-btn" onclick="alert('Your order has been placed!')">Buy Now</button>
+        <button class="wishlist-btn" onclick="addToWishlist()">Add to Wishlist</button>
+        <button class="back-btn" onclick="window.location.href='Homepage.html'">← Back</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const products = [
+       // Electronics
+    { id: 1, category: "Electronics", name: 'Smart Watch', price: 49.99, reviews: '240', rating: 4, image: 'https://cdn.mos.cms.futurecdn.net/FkGweMeB7hdPgaSFQdgsfj.jpg', description: 'Track your health, notifications, and fitness with this smart watch.' },
+    { id: 2, category: "Electronics", name: 'Wireless Earbuds', price: 29.99, reviews: '180', rating: 5, image: 'https://alflip.com/uploads/all/1726138580_HOCO%20EQ8%20Pure%20joy%20Earhook%20wireless%20Earbuds.webp', description: 'Enjoy crystal-clear audio and deep bass with these wireless earbuds.' },
+    { id: 3, category: "Electronics", name: 'Bluetooth Speaker', price: 34.99, reviews: '75', rating: 4, image: 'https://gadgetstudiobd.com/wp-content/uploads/2024/12/jbl-go-4-1.webp', description: 'Portable speaker with punchy sound.' },
+    { id: 4, category: "Electronics", name: 'Gaming Mouse', price: 19.99, reviews: '310', rating: 5, image: 'https://www.startech.com.bd/image/cache/catalog/mouse/aula/f816/f816-01-500x500.webp', description: 'High precision gaming mouse with RGB lighting.' },
+    { id: 5, category: "Electronics", name: 'Gaming Keyboard', price: 29.99, reviews: '310', rating: 4, image: 'https://www.zymak.com.bd/wp-content/uploads/2018/12/M200-Low-Price-Gaming-Keyboard-In-Bangladesh.jpg', description: 'Durable mechanical-feel keyboard.' },
+    { id: 6, category: "Electronics", name: 'Headset', price: 30.99, reviews: '310', rating: 5, image: 'https://www.startech.com.bd/image/cache/catalog/headset/logitech/pro-x/pro-x-gaming-headset-2-500x500.jpg', description: 'Comfortable headset with clear mic.' },
+    { id: 7, category: "Electronics", name: 'WiFi Router', price: 15.99, reviews: '310', rating: 3, image: 'https://www.startech.com.bd/image/cache/catalog/router/tp-link/archer-ax15/archer-ax15-02-500x500.webp', description: 'Affordable router with stable performance.' },
+
+    // Fashion
+    { id: 8, category: "Fashion", name: 'Men’s Casual Shirt', price: 24.99, reviews: '150', rating: 4, image: 'https://m.media-amazon.com/images/I/81HLw4cX8kL._AC_UX569_.jpg', description: 'Comfortable cotton casual shirt for men.' },
+    { id: 9, category: "Fashion", name: 'Women’s Summer Dress', price: 39.99, reviews: '200', rating: 5, image: 'https://m.media-amazon.com/images/I/71X-2jF2QBL._AC_UY879_.jpg', description: 'Stylish summer dress made with breathable fabric.' },
+    { id: 10, category: "Fashion", name: 'Sneakers', price: 59.99, reviews: '400', rating: 5, image: 'https://m.media-amazon.com/images/I/71hMhtL0piL._AC_UX695_.jpg', description: 'Lightweight and durable sneakers for everyday wear.' },
+    { id: 11, category: "Fashion", name: 'Leather Wallet', price: 19.99, reviews: '320', rating: 4, image: 'https://m.media-amazon.com/images/I/71v+PxnPfaL._AC_UX679_.jpg', description: 'Genuine leather wallet with multiple card slots.' },
+
+    // Home & Kitchen
+    { id: 12, category: "Home & Kitchen", name: 'Nonstick Cookware Set', price: 79.99, reviews: '90', rating: 4, image: 'https://m.media-amazon.com/images/I/71D1xd5GgqL._AC_SL1500_.jpg', description: 'Complete cookware set for all your cooking needs.' },
+    { id: 13, category: "Home & Kitchen", name: 'Vacuum Cleaner', price: 129.99, reviews: '60', rating: 4, image: 'https://m.media-amazon.com/images/I/71sFdyE9DNL._AC_SL1500_.jpg', description: 'Powerful vacuum cleaner with multiple attachments.' },
+    { id: 14, category: "Home & Kitchen", name: 'Air Fryer', price: 89.99, reviews: '170', rating: 5, image: 'https://m.media-amazon.com/images/I/71jRY6jU3sL._AC_SL1500_.jpg', description: 'Healthy cooking with little to no oil.' },
+    { id: 15, category: "Home & Kitchen", name: 'Coffee Maker', price: 49.99, reviews: '200', rating: 4, image: 'https://m.media-amazon.com/images/I/71Rx0D8hczL._AC_SL1500_.jpg', description: 'Brew rich and fresh coffee every morning.' },
+
+    // Sports & Fitness
+    { id: 16, category: "Sports & Fitness", name: 'Yoga Mat', price: 19.99, reviews: '350', rating: 5, image: 'https://m.media-amazon.com/images/I/81stD9QOHgL._AC_SL1500_.jpg', description: 'Comfortable non-slip yoga mat.' },
+    { id: 17, category: "Sports & Fitness", name: 'Dumbbell Set', price: 99.99, reviews: '140', rating: 4, image: 'https://m.media-amazon.com/images/I/71dyW6x9ewL._AC_SL1500_.jpg', description: 'Adjustable dumbbell set for workouts.' },
+
+    // Books
+    { id: 18, category: "Books", name: 'The Great Gatsby', price: 9.99, reviews: '5000', rating: 5, image: 'https://m.media-amazon.com/images/I/81AFxExr8-L._AC_UY327_.jpg', description: 'Classic novel by F. Scott Fitzgerald.' },
+    { id: 19, category: "Books", name: 'Atomic Habits', price: 14.99, reviews: '7000', rating: 5, image: 'https://m.media-amazon.com/images/I/91bYsX41DVL._AC_UY327_.jpg', description: 'Bestseller on building good habits.' },
+
+    // Beauty & Personal Care
+    { id: 20, category: "Beauty & Personal Care", name: 'Moisturizing Cream', price: 12.99, reviews: '600', rating: 4, image: 'https://m.media-amazon.com/images/I/61c2kl-7u3L._AC_SL1500_.jpg', description: 'Hydrating cream for all skin types.' }
+
+    ];
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = parseInt(params.get("id"));
+    const product = products.find(p => p.id === productId);
+
+    if(product){
+      document.getElementById("productName").textContent = product.name;
+      document.getElementById("productPrice").textContent = "$" + product.price.toFixed(2);
+      document.getElementById("productRating").textContent = `${product.rating} ⭐ · ${product.reviews} reviews`;
+      document.getElementById("productDesc").textContent = product.description;
+      document.getElementById("productImage").src = product.image;
+
+      const stockStatus = document.getElementById("stockStatus");
+      const rnd = Math.random();
+      if(rnd > 0.8){ stockStatus.textContent = "Out of Stock"; stockStatus.style.color="red"; }
+      else if(rnd > 0.5){ stockStatus.textContent = "Only a few left"; stockStatus.style.color="orange"; }
+      else { stockStatus.textContent = "In Stock"; stockStatus.style.color="green"; }
+    }
+
+    function addToWishlist(){
+      alert(product.name + " added to wishlist!");
+    }
+
+    const dmBtn = document.getElementById('toggleDarkBtn');
+    dmBtn.addEventListener('click', ()=>{
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    });
+    if(localStorage.getItem('darkMode') === 'true'){
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+</html>
